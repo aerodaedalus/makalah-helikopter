@@ -319,6 +319,47 @@ body.web-publication .page{padding:1in}
   .iw input,.iw button{display:none}
   .iw .sl{margin-bottom:4px}
 }
+
+/* ===== Perbaikan tampilan HP ===== */
+html,body{overflow-x:hidden;max-width:100%}
+img,svg,canvas,video{max-width:100%;height:auto}
+.page *{min-width:0}
+.page table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.page .eq,.page pre,.page .box,.page .berkas,.page .solved,.page .ujidiri,.page .petunjuk{overflow-wrap:anywhere}
+.page .eq{overflow-x:auto}
+.page p,.page li,.page td,.page th{overflow-wrap:break-word}
+@media(max-width:680px){
+  .page{font-size:16px}
+  .page table{font-size:13px}
+  .page th,.page td{padding:6px 8px}
+  .casehead{flex-wrap:wrap;gap:6px}
+  .rantai{overflow-x:auto}
+  .cover h1{font-size:34px!important}
+  .author-table{width:100%}
+  .iw{padding:14px 12px}
+  .iw canvas,.iw svg{width:100%}
+  .lightbox img{max-width:96vw}
+}
+
+/* ===== HP: daftar isi jadi laci geser ===== */
+.nav-toggle{display:none}
+@media(max-width:900px){
+  body.web-publication .page,body.web-publication .page.partpage,body.web-publication .page.cover{margin-left:10px;margin-right:10px}
+  body.web-publication .sidebar{position:fixed!important;top:64px!important;bottom:0!important;left:0;width:min(86vw,320px)!important;max-height:none!important;transform:translateX(-105%);transition:transform .25s ease;box-shadow:4px 0 18px rgba(0,0,0,.25);z-index:200;display:block}
+  body.web-publication .sidebar.open{transform:none}
+  body.web-publication .sidebar-list{display:block!important}
+  .nav-toggle{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:8px 12px;border:1px solid #5f7894;border-radius:4px;color:#fff;background:transparent;font:600 13px/1 system-ui,sans-serif;cursor:pointer}
+  .web-print-button{display:none!important}
+  .nav-scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150;display:none}
+  .nav-scrim.open{display:block}
+}
+@media(max-width:680px){
+  body.web-publication .topnav{height:64px}
+  .page p,.page li{text-align:left!important;hyphens:auto;line-height:1.65!important}
+  .page{font-size:16px;line-height:1.65}
+}
+.page table.author-table{display:table;width:100%;overflow:visible}
+@media(max-width:680px){.toc{column-count:1!important}.toc div{display:flex;gap:6px}.toc .p{display:block}}
 </style>
 </head>
 <body>
@@ -1602,6 +1643,21 @@ showChain(0);
  card.addEventListener('click',()=>card.classList.toggle('flip'));card.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();card.classList.toggle('flip');}});
  $('fl-next').addEventListener('click',()=>{i=(i+1)%rows.length;show();});$('fl-prev').addEventListener('click',()=>{i=(i-1+rows.length)%rows.length;show();});
  $('fl-shuf').addEventListener('click',()=>{order.sort(()=>Math.random()-.5);i=0;show();});show();})();
+})();
+
+/* tombol daftar isi untuk HP */
+(function(){
+  try{
+    var side=document.querySelector('.sidebar'),nav=document.querySelector('.topnav');
+    if(!side||!nav)return;
+    var b=document.createElement('button');b.className='nav-toggle';b.type='button';b.textContent='☰ Daftar isi';b.setAttribute('aria-label','Buka daftar isi');
+    var s=document.createElement('div');s.className='nav-scrim';document.body.appendChild(s);
+    function t(o){side.classList.toggle('open',o);s.classList.toggle('open',o)}
+    b.onclick=function(){t(!side.classList.contains('open'))};
+    s.onclick=function(){t(false)};
+    side.addEventListener('click',function(e){if(e.target.closest('a'))t(false)});
+    nav.appendChild(b);
+  }catch(e){}
 })();
 </script>
 </body>
